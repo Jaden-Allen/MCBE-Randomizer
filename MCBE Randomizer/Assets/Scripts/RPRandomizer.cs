@@ -56,7 +56,7 @@ public class RPRandomizer : MonoBehaviour
         fileType = "application/octet-stream";
 #endif
 #if UNITY_ANDROID
-        fileType = "mcpack";
+        fileType = "application/octet-stream";
 #endif
     }
     private void Update()
