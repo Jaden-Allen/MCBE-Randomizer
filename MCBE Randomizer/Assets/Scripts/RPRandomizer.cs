@@ -248,7 +248,7 @@ public class RPRandomizer : MonoBehaviour
 
         Directory.Delete(packPath, true);
         ZipFile.CreateFromDirectory(generatedPath, Path.Combine(rootPath, "Randomized.mcpack"));
-        File.Open(Path.Combine(rootPath, "Randomized.mcpack"), FileMode.Open);
+        Application.OpenURL(Path.Combine(rootPath, "Randomized.mcpack"));
 
         packGenerating = false;
     }
