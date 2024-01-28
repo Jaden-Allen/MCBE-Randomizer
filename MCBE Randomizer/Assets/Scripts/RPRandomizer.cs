@@ -15,6 +15,7 @@ public class RPRandomizer : MonoBehaviour
     public TMP_InputField seedField;
     public Button importPackButton;
     public Button exportPackButton;
+    public TMP_Text debugText;
 
     string rootPath;
     string packPath;
@@ -119,6 +120,7 @@ public class RPRandomizer : MonoBehaviour
             else
             {
                 importedPackPath = path;
+                debugText.text = path.ToString();
             }
         }, new string[] { });
     }
@@ -127,10 +129,12 @@ public class RPRandomizer : MonoBehaviour
         try
         {
             ZipFile.ExtractToDirectory(path, packPath, true);
+            debugText.text = "extracting to directory" + packPath;
         }
         catch
         {
             Debug.Log("Error Extracting pack");
+            debugText.text = "Error Extracting pack";
             return;
         }
 
@@ -165,6 +169,7 @@ public class RPRandomizer : MonoBehaviour
                     {
                         rpPath = dir;
                         Debug.Log("Found RP Directory! " + dir);
+                        debugText.text = "Found RP Directory! " + dir;
                     }
                 }
                 yield return null;
@@ -188,7 +193,7 @@ public class RPRandomizer : MonoBehaviour
                         {
                             blockPaths.Add(file);
                             newBlockPaths.Add(file);
-
+                            debugText.text = file;
                             yield return null;
                         }
                     }
@@ -203,7 +208,7 @@ public class RPRandomizer : MonoBehaviour
                         {
                             itemPaths.Add(file);
                             newItemPaths.Add(file);
-
+                            debugText.text = file;
                             yield return null;
                         }
                     }
@@ -226,6 +231,7 @@ public class RPRandomizer : MonoBehaviour
             charArray.RemoveAt(0);
             string finalFilePath = new string(charArray.ToArray());
             File.Copy(file, Path.Combine(blocksPath, finalFilePath), true);
+            debugText.text = finalFilePath;
 
             progressIndex++;
 
@@ -240,7 +246,7 @@ public class RPRandomizer : MonoBehaviour
             charArray.RemoveAt(0);
             string finalFilePath = new string(charArray.ToArray());
             File.Copy(file, Path.Combine(itemsPath, finalFilePath), true);
-
+            debugText.text = finalFilePath;
             progressIndex++;
 
             yield return null;
