@@ -7,6 +7,8 @@ using System;
 using System.Linq;
 using UnityEngine.UI;
 using TMPro;
+using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 
 public class RPRandomizer : MonoBehaviour
 {
@@ -39,10 +41,13 @@ public class RPRandomizer : MonoBehaviour
     string itemsPathDir = "";
     string blocksPathDir = "";
 
+    string importedPackName = "";
+
     bool packImported = false;
     bool packGenerating = false;
     int progressIndex = 0;
     int seed = 0;
+    string seedString = "";
     private void Start()
     {
         rootPath = Application.persistentDataPath;
@@ -84,6 +89,7 @@ public class RPRandomizer : MonoBehaviour
             return;
         }
         seed = seedField.text.GetHashCode();
+        seedString = seedField.text;
         Debug.Log(seed);
     }
     public void GenerateEmptyPack()
@@ -102,12 +108,6 @@ public class RPRandomizer : MonoBehaviour
         Directory.CreateDirectory(blocksPath);
         Directory.CreateDirectory(itemsPath);
 
-        string manifest = manifestJson.ToString();
-        manifest = manifest.Replace("[NAME]", "Randomized Pack!");
-        manifest = manifest.Replace("[UUID1]", Guid.NewGuid().ToString());
-        manifest = manifest.Replace("[UUID2]", Guid.NewGuid().ToString());
-
-        File.WriteAllText(Path.Combine(generatedPath, "manifest.json"), manifest);
     }
     public void ImportTexturePack()
     {
@@ -120,21 +120,23 @@ public class RPRandomizer : MonoBehaviour
             else
             {
                 importedPackPath = path;
-                debugText.text = path.ToString();
             }
         }, new string[] { });
     }
-    public void UncompressPack(string path)
+    public async void UncompressPack(string path)
     {
         try
         {
-            File.Copy(path, Path.Combine(rootPath, "pack.zip"));
-            ZipFile.ExtractToDirectory(Path.Combine(rootPath, "pack.zip"), packPath, true);
-            debugText.text = "extracting " + path + " to directory" + packPath;
+            debugText.text = "Extracting Pack this could take a while...";
+
+            progressBar.maxValue = 2;
+            progressBar.value = 1;
+
+            await Task.Run(() => ZipFile.ExtractToDirectory(path, packPath, true));
         }
-        catch
+        catch (Exception e)
         {
-            Debug.Log("Error Extracting pack");
+            Debug.Log("Error Extracting pack" + e);
             debugText.text = "Error Extracting pack";
             return;
         }
@@ -165,12 +167,13 @@ public class RPRandomizer : MonoBehaviour
                 if (file.Contains("manifest.json"))
                 {
                     string content = File.ReadAllText(file);
+                    var jo = JObject.Parse(content);
+                    importedPackName = jo["header"]["name"].ToString();
 
                     if (content.Contains("resources"))
                     {
                         rpPath = dir;
-                        Debug.Log("Found RP Directory! " + dir);
-                        debugText.text = "Found RP Directory! " + dir;
+                        debugText.text = "Found RP Directory!";
                     }
                 }
                 yield return null;
@@ -194,7 +197,12 @@ public class RPRandomizer : MonoBehaviour
                         {
                             blockPaths.Add(file);
                             newBlockPaths.Add(file);
-                            debugText.text = file;
+                            string fileName = file;
+                            fileName = fileName.Replace(dir, "");
+                            List<char> charArray = fileName.ToCharArray().ToList<char>();
+                            charArray.RemoveAt(0);
+                            string finalFilePath = new string(charArray.ToArray());
+                            debugText.text = "Found: " + finalFilePath;
                             yield return null;
                         }
                     }
@@ -209,7 +217,12 @@ public class RPRandomizer : MonoBehaviour
                         {
                             itemPaths.Add(file);
                             newItemPaths.Add(file);
-                            debugText.text = file;
+                            string fileName = file; 
+                            fileName= fileName.Replace(dir, "");
+                            List<char> charArray = fileName.ToCharArray().ToList<char>();
+                            charArray.RemoveAt(0);
+                            string finalFilePath = new string(charArray.ToArray());
+                            debugText.text = "Found: " + finalFilePath;
                             yield return null;
                         }
                     }
@@ -252,14 +265,26 @@ public class RPRandomizer : MonoBehaviour
 
             yield return null;
         }
+        GenerateManifest();
 
         Directory.Delete(packPath, true);
         ZipFile.CreateFromDirectory(generatedPath, Path.Combine(rootPath, "Randomized.mcpack"));
-        Application.OpenURL(Path.Combine(rootPath, "Randomized.mcpack"));
+        debugText.text = "Pack randomizing finished, attempting to open pack!";
+        //Application.OpenURL(Path.Combine(rootPath, "Randomized.mcpack"));
+        AndroidContentOpenerWrapper.OpenContent(Path.Combine(rootPath, "Randomized.mcpack"));
 
         packGenerating = false;
     }
+    void GenerateManifest()
+    {
+        string manifest = manifestJson.ToString();
+        manifest = manifest.Replace("[NAME]", importedPackName + " - Randomized!");
+        manifest = manifest.Replace("[DESCRIPTION]", "A fully randomized resource pack! Seed: " + seedString + ", HashCode: " + seed);
+        manifest = manifest.Replace("[UUID1]", Guid.NewGuid().ToString());
+        manifest = manifest.Replace("[UUID2]", Guid.NewGuid().ToString());
 
+        File.WriteAllText(Path.Combine(generatedPath, "manifest.json"), manifest);
+    }
 }
 
 public static class RandomizerManager

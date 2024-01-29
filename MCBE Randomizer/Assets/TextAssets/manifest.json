@@ -2,7 +2,7 @@
     "format_version": 2,
     "header": {
       "name": "[NAME]",
-      "description": "A fully randomized pack!",
+      "description": "[DESCRIPTION]",
       "uuid": "[UUID1]",
       "version": [
         1,
@@ -17,7 +17,7 @@
     },
     "modules": [
       {
-        "description": "A fully randomized pack!",
+        "description": "[DESCRIPTION]",
         "type": "resources",
         "uuid": "[UUID2]",
         "version": [
