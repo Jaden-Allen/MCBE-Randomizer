@@ -152,7 +152,7 @@ public class RPRandomizer : MonoBehaviour
         itemPaths.Clear();
         newItemPaths.Clear();
 
-        GenerateEmptyPack();
+        //GenerateEmptyPack();
         string[] directories = Directory.GetDirectories(packPath);
         string rpPath = "";
         foreach (string dir in directories)
