@@ -129,7 +129,7 @@ public class RPRandomizer : MonoBehaviour
         try
         {
             ZipFile.ExtractToDirectory(path, packPath, true);
-            debugText.text = "extracting to directory" + packPath;
+            debugText.text = "extracting " + path + " to directory" + packPath;
         }
         catch
         {
