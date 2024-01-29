@@ -128,7 +128,8 @@ public class RPRandomizer : MonoBehaviour
     {
         try
         {
-            ZipFile.ExtractToDirectory(mcpackPath, packPath, true);
+            File.Copy(path, Path.Combine(rootPath, "pack.zip"));
+            ZipFile.ExtractToDirectory(Path.Combine(rootPath, "pack.zip"), packPath, true);
             debugText.text = "extracting " + path + " to directory" + packPath;
         }
         catch
@@ -152,7 +153,7 @@ public class RPRandomizer : MonoBehaviour
         itemPaths.Clear();
         newItemPaths.Clear();
 
-        //GenerateEmptyPack();
+        GenerateEmptyPack();
         string[] directories = Directory.GetDirectories(packPath);
         string rpPath = "";
         foreach (string dir in directories)
