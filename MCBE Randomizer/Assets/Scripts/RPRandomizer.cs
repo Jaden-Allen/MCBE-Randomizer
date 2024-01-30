@@ -144,6 +144,11 @@ public class RPRandomizer : MonoBehaviour
             }
         }, new string[] { });
     }
+    public void GeneratePack()
+    {
+        UncompressPack(importedPackPath);
+        packGenerating = true;
+    }
     public async void UncompressPack(string path)
     {
         try
@@ -163,11 +168,6 @@ public class RPRandomizer : MonoBehaviour
         }
 
         StartCoroutine(GetTextures());
-    }
-    public void GeneratePack()
-    {
-        UncompressPack(importedPackPath);
-        packGenerating = true;
     }
     public IEnumerator GetTextures()
     {
