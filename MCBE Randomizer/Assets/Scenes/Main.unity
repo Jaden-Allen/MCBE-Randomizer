@@ -504,7 +504,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 174.95}
+  m_AnchoredPosition: {x: 0, y: 174.9502}
   m_SizeDelta: {x: 0, y: 349.91}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &246038199
@@ -4767,7 +4767,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d840cfcb34a6a984fb80998b910544bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rp: {fileID: 0}
+  rp: {fileID: 1592465662}
 --- !u!4 &1372894784
 Transform:
   m_ObjectHideFlags: 0
@@ -5392,6 +5392,7 @@ MonoBehaviour:
   importPackButton: {fileID: 1450433661}
   exportPackButton: {fileID: 1095820716}
   debugText: {fileID: 388081182}
+  packIcon: {fileID: 2800000, guid: dd985cf9723accc45bacd915dc611f60, type: 3}
   itemsToggle: {fileID: 246038202}
   toolsToggle: {fileID: 854040643}
   armourToggle: {fileID: 111700745}

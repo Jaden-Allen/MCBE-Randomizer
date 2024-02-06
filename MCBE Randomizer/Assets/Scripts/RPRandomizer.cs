@@ -20,6 +20,8 @@ public class RPRandomizer : MonoBehaviour
     public Button exportPackButton;
     public TMP_Text debugText;
 
+    public Texture2D packIcon;
+
     [Header("Items Toggles")]
     public CustomToggle itemsToggle;
     public CustomToggle toolsToggle;
@@ -40,6 +42,7 @@ public class RPRandomizer : MonoBehaviour
     string texturesPath;
     string blocksPath;
     string itemsPath;
+    string packIconPath;
 
     string fileType;
 
@@ -53,6 +56,7 @@ public class RPRandomizer : MonoBehaviour
     string blocksPathDir = "";
 
     string importedPackName = "";
+    string importedPackIcon;
 
     bool packImported = false;
     bool packGenerating = false;
@@ -68,6 +72,7 @@ public class RPRandomizer : MonoBehaviour
         blocksPath = Path.Combine(generatedPath, "textures", "blocks");
         itemsPath = Path.Combine(generatedPath, "textures", "items");
         mcpackPath = Path.Combine(rootPath, "Randomized.mcpack");
+        packIconPath = Path.Combine(generatedPath, "pack_icon.png");
 
 #if UNITY_EDITOR
         fileType = "application/octet-stream";
@@ -195,6 +200,7 @@ public class RPRandomizer : MonoBehaviour
                     {
                         rpPath = dir;
                         debugText.text = "Found RP Directory!";
+                        importedPackIcon = Path.Combine(rpPath, "pack_icon.png");
                     }
                 }
                 yield return null;
@@ -359,6 +365,7 @@ public class RPRandomizer : MonoBehaviour
         }
         
         GenerateManifest();
+        GenerateIcon();
 
         Directory.Delete(packPath, true);
         ZipFile.CreateFromDirectory(generatedPath, Path.Combine(rootPath, "Randomized.mcpack"));
@@ -367,6 +374,17 @@ public class RPRandomizer : MonoBehaviour
         AndroidContentOpenerWrapper.OpenContent(Path.Combine(rootPath, "Randomized.mcpack"));
 
         packGenerating = false;
+    }
+    void GenerateIcon()
+    {
+        if (importedPackIcon != null || importedPackIcon != "" )
+        {
+            File.Copy(importedPackIcon, packIconPath);
+        }
+        else
+        {
+            File.WriteAllBytes(packIconPath, packIcon.EncodeToPNG());
+        }
     }
     void GenerateManifest()
     {

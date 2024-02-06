@@ -134,7 +134,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  bundleVersion: 0.2
+  bundleVersion: 0.0.3
   preloadedAssets: []
   metroInputSource: 0
   wsaTransparentSwapchain: 0
@@ -161,7 +161,7 @@ PlayerSettings:
     iPhone: 0
     tvOS: 0
   overrideDefaultApplicationIdentifier: 0
-  AndroidBundleVersionCode: 2
+  AndroidBundleVersionCode: 3
   AndroidMinSdkVersion: 30
   AndroidTargetSdkVersion: 34
   AndroidPreferredInstallLocation: 1
@@ -249,7 +249,8 @@ PlayerSettings:
   AndroidTargetDevices: 0
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: C:/Users/jaime/OneDrive/Desktop/user.keystore
+  AndroidKeystoreName: C:/Users/jaime/OneDrive/Desktop/Game Dev/Jaden Games/Randomizer
+    for Minecraft/user.keystore
   AndroidKeyaliasName: randomizermcbe
   AndroidBuildApkPerCpuArchitecture: 0
   AndroidTVCompatibility: 0
